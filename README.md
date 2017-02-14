@@ -37,9 +37,10 @@ GIF created with [LineageOS-Recoder + ffmpeg](https://ffmpeg.zeranoe.com/builds/
 
 ## Notes
 
- * I wanted to develop in Linux only. I ended up spending a non-trivial amount of time getting a Ubunutu Hyper-V VM + windows X server install
- * Hyper-V does not passthrough processor virt features to guest OS'es; so Android Studio complained about not having support to setup a fast emulator
- * Figured out how to use adb to connect to my device over the network, so ended up testing/ debugging on my OnePlus one
+#### Environment setup related:
+
+ * I wanted to develop in Linux exclusively. Setting u up a Ubunutu Hyper-V VM + Windows X server install + Android Studio took a non-trivial amount of time! It seems to be worth the effort though, no PATH related foo-bars!
+ * For testing/debugging: Hyper-V does not passthrough processor virt features to guest OS'es; so Android Studio complained about not having support to setup a fast emulator. I ended up using a real Android device + using ADB over the network (ADB over network support is pretty cool!)
 
 ## License
 
