@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
@@ -16,6 +17,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static android.R.attr.name;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
         SetupListViewListener();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == EditItemActivity.EDIT_REQUEST_CODE) {
+            String todoUpdatedValue = data.getExtras().getString(EditItemActivity.ToDoVaule);
+            int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
+
+            items.set(pos,todoUpdatedValue);
+            itemsAdapter.notifyDataSetChanged();
+            WriteItems();
+        }
+    }
+
     private void SetupListViewListener() {
         lvItems.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
@@ -55,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
                 Intent callEdit = new Intent(MainActivity.this, EditItemActivity.class);
-                callEdit.putExtra("position",pos);
-                callEdit.putExtra("todoValue",items.get(pos));
+                callEdit.putExtra(EditItemActivity.Position,pos);
+                callEdit.putExtra(EditItemActivity.ToDoVaule,items.get(pos));
 
                 startActivityForResult(callEdit,EditItemActivity.EDIT_REQUEST_CODE);
             }
@@ -93,5 +108,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 
 }

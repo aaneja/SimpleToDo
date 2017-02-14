@@ -9,8 +9,10 @@ import android.widget.EditText;
 public class EditItemActivity extends AppCompatActivity {
 
     public static final int EDIT_REQUEST_CODE = 449;
+    public static final String Position = "position";
+    public static final String ToDoVaule = "todovalue";
+
     private int position;
-    private String todoVaule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +20,20 @@ public class EditItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_item);
 
         Intent inbound = getIntent();
-        position = inbound.getIntExtra("position",0);
-        todoVaule = inbound.getStringExtra("todoValue");
+        position = inbound.getIntExtra(Position,0);
 
         EditText etNewText = (EditText) findViewById(R.id.editText);
-        etNewText.setText(todoVaule);
+        etNewText.setText(inbound.getStringExtra(ToDoVaule));
     }
 
-    public void onSubmit(View v) {
+    public void onSave(View v) {
+       EditText etUpdatedText = (EditText) findViewById(R.id.editText);
 
+        Intent data = new Intent();
+        data.putExtra(ToDoVaule, etUpdatedText.getText().toString());
+        data.putExtra(Position, position);
+
+        setResult(RESULT_OK, data);
+        finish();
     }
 }
