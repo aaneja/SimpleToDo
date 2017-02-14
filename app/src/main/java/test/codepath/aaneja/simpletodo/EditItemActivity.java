@@ -10,7 +10,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     public static final int EDIT_REQUEST_CODE = 449;
     public static final String Position = "position";
-    public static final String ToDoVaule = "todovalue";
+    public static final String ToDoVaule = "todoValue";
 
     private int position;
 
