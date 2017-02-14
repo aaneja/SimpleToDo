@@ -1,5 +1,6 @@
 package test.codepath.aaneja.simpletodo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
                     WriteItems();
                     return true;
                 }
+        });
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
+                Intent callEdit = new Intent(MainActivity.this, EditItemActivity.class);
+                callEdit.putExtra("position",pos);
+                callEdit.putExtra("todoValue",items.get(pos));
+
+                startActivityForResult(callEdit,EditItemActivity.EDIT_REQUEST_CODE);
+            }
         });
     }
 
