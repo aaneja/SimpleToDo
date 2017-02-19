@@ -7,24 +7,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
-import static android.R.attr.name;
+import test.codepath.aaneja.simpletodo.models.ToDoItem;
+import test.codepath.aaneja.simpletodo.adapters.ToDoItemAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView lvItems;
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
+    private ArrayList<ToDoItem> items;
+    private ToDoItemAdapter itemsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +31,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lvItems = (ListView) findViewById(R.id.lvItems);
-        //items = new ArrayList<>();
+
         ReadItems();
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new ToDoItemAdapter(this, android.R.layout.simple_list_item_1, items);
 
         lvItems.setAdapter(itemsAdapter);
-        //items.add("First Item");
-        //items.add("Second Item");
 
         SetupListViewListener();
+
     }
 
     @Override
@@ -49,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
             String todoUpdatedValue = data.getExtras().getString(EditItemActivity.ToDoVaule);
             int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
 
-            items.set(pos,todoUpdatedValue);
+            ToDoItem fakeItem = new ToDoItem(todoUpdatedValue, new Date(2017, 2, 17));
+
+            items.set(pos,fakeItem);
             itemsAdapter.notifyDataSetChanged();
             WriteItems();
         }
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
                 Intent callEdit = new Intent(MainActivity.this, EditItemActivity.class);
                 callEdit.putExtra(EditItemActivity.Position,pos);
-                callEdit.putExtra(EditItemActivity.ToDoVaule,items.get(pos));
+                callEdit.putExtra(EditItemActivity.ToDoVaule,items.get(pos).Name);
 
                 startActivityForResult(callEdit,EditItemActivity.EDIT_REQUEST_CODE);
             }
@@ -82,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
         EditText etNewText = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewText.getText().toString();
 
-        itemsAdapter.add(itemText);
+        ToDoItem item = new ToDoItem(itemText,new Date(2017, 2, 17));
+
+        itemsAdapter.add(item);
         etNewText.setText("");
         WriteItems();
     }
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir,"todo.txt");
         try {
-            items = new ArrayList<>(FileUtils.readLines(todoFile));
+            ArrayList<String> itemsFromFile = new ArrayList<>(FileUtils.readLines(todoFile));
+            items = new ArrayList<>();
         }
         catch (IOException e) {
             items = new ArrayList<>();
