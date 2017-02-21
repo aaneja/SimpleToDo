@@ -11,8 +11,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import test.codepath.aaneja.simpletodo.models.ToDoItem;
 
 public class EditItemActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener {
 
@@ -20,7 +23,7 @@ public class EditItemActivity extends AppCompatActivity  implements DatePickerDi
 
     public static final int EDIT_REQUEST_CODE = 449;
     public static final String Position = "position";
-    public static final String ToDoVaule = "todoValue";
+    public static final String ToDoItem = "todoValue";
 
     private int position;
 
@@ -32,18 +35,25 @@ public class EditItemActivity extends AppCompatActivity  implements DatePickerDi
         Intent inbound = getIntent();
         position = inbound.getIntExtra(Position,0);
 
-        EditText etNewText = (EditText) findViewById(R.id.editText);
-        etNewText.setText(inbound.getStringExtra(ToDoVaule));
+        ToDoItem itemToAddEdit = inbound.getParcelableExtra(ToDoItem);
+        if(itemToAddEdit != null)
+        {
+            EditText etNewText = (EditText) findViewById(R.id.editText);
+            etNewText.setText(itemToAddEdit.Name);
 
-        TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
-        tvEditDate.setText(dateFormat.format(Calendar.getInstance().getTime()));
+            TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+            tvEditDate.setText(dateFormat.format(itemToAddEdit.DueDate));
+        }
     }
 
-    public void onSave(View v) {
-       EditText etUpdatedText = (EditText) findViewById(R.id.editText);
+    public void onSave(View v) throws ParseException {
+        EditText etUpdatedText = (EditText) findViewById(R.id.editText);
+        TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+
 
         Intent data = new Intent();
-        data.putExtra(ToDoVaule, etUpdatedText.getText().toString());
+        ToDoItem updatedToDoItem = new ToDoItem(etUpdatedText.getText().toString(),dateFormat.parse(tvEditDate.getText().toString()));
+        data.putExtra(ToDoItem, updatedToDoItem);
         data.putExtra(Position, position);
 
         setResult(RESULT_OK, data);
