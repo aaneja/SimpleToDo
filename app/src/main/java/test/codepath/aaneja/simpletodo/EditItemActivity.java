@@ -1,12 +1,22 @@
 package test.codepath.aaneja.simpletodo;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class EditItemActivity extends AppCompatActivity {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class EditItemActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener {
+
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final int EDIT_REQUEST_CODE = 449;
     public static final String Position = "position";
@@ -24,6 +34,9 @@ public class EditItemActivity extends AppCompatActivity {
 
         EditText etNewText = (EditText) findViewById(R.id.editText);
         etNewText.setText(inbound.getStringExtra(ToDoVaule));
+
+        TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+        tvEditDate.setText(dateFormat.format(Calendar.getInstance().getTime()));
     }
 
     public void onSave(View v) {
@@ -35,5 +48,23 @@ public class EditItemActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    public void showDatePickerDialog(View v) {
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    // handle the date selected
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        // store the values selected into a Calendar instance
+        final Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, monthOfYear);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+        tvEditDate.setText(dateFormat.format(c.getTime()));
     }
 }

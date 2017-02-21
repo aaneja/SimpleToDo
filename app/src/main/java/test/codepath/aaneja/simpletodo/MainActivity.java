@@ -1,11 +1,13 @@
 package test.codepath.aaneja.simpletodo;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -14,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import test.codepath.aaneja.simpletodo.models.ToDoItem;
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             String todoUpdatedValue = data.getExtras().getString(EditItemActivity.ToDoVaule);
             int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
 
-            ToDoItem fakeItem = new ToDoItem(todoUpdatedValue, new Date(2017, 2, 17));
+            ToDoItem fakeItem = new ToDoItem(todoUpdatedValue, Calendar.getInstance().getTime());
 
             items.set(pos,fakeItem);
             itemsAdapter.notifyDataSetChanged();
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         EditText etNewText = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewText.getText().toString();
 
-        ToDoItem item = new ToDoItem(itemText,new Date(2017, 2, 17));
+        ToDoItem item = new ToDoItem(itemText,Calendar.getInstance().getTime());
 
         itemsAdapter.add(item);
         etNewText.setText("");
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
 
 }

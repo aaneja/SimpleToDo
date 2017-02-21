@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,8 @@ import test.codepath.aaneja.simpletodo.models.ToDoItem;
  */
 
 public class ToDoItemAdapter extends ArrayAdapter<ToDoItem>{
+
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     public ToDoItemAdapter(Context context, int resource, ArrayList<ToDoItem> objects) {
         super(context, resource, objects);
@@ -38,7 +42,7 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem>{
         TextView tvDueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
         // Populate the data into the template view using the data object
         tvName.setText(user.Name);
-        tvDueDate.setText(user.DueDate.toString());
+        tvDueDate.setText(df.format(user.DueDate));
         // Return the completed view to render on screen
         return convertView;
 
