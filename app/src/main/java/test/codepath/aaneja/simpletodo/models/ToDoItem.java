@@ -3,6 +3,7 @@ package test.codepath.aaneja.simpletodo.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,6 +17,9 @@ public class ToDoItem implements Parcelable {
     public ToDoItem(String name, Date dueDate) {
         Name = name;
         DueDate = dueDate;
+    }
+
+    public ToDoItem() {
     }
 
     @Override

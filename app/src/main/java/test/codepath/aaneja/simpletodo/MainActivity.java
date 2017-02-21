@@ -6,15 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collection;
 
 import test.codepath.aaneja.simpletodo.adapters.ToDoItemAdapter;
 import test.codepath.aaneja.simpletodo.models.ToDoItem;
@@ -53,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
                 items.set(pos,todoUpdatedValue);
             }
-            
+
             itemsAdapter.notifyDataSetChanged();
-            //WriteItems();
+            WriteItems();
         }
     }
 
@@ -95,15 +98,21 @@ public class MainActivity extends AppCompatActivity {
         callAdd.putExtra(EditItemActivity.AddItemRequest, true);
         startActivityForResult(callAdd,EditItemActivity.EDIT_REQUEST_CODE);
 
-        //WriteItems();
+        WriteItems();
     }
 
+    //TODO: Switch to using a either a SQL or indexed KV store
     private void ReadItems()    {
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<Collection<ToDoItem>>(){}.getType();
+
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir,"todo.txt");
+
         try {
-            ArrayList<String> itemsFromFile = new ArrayList<>(FileUtils.readLines(todoFile));
+            Collection<ToDoItem> readItems = gson.fromJson(FileUtils.readFileToString(todoFile), collectionType);
             items = new ArrayList<>();
+            items.addAll(readItems);
         }
         catch (IOException e) {
             items = new ArrayList<>();
@@ -111,11 +120,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void WriteItems() {
+
+        Gson gson = new Gson();
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir,"todo.txt");
 
         try {
-            FileUtils.writeLines(todoFile,items);
+            FileUtils.write(todoFile,gson.toJson(items));
         } catch (IOException e) {
             e.printStackTrace();
         }
