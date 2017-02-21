@@ -24,7 +24,7 @@
         android:id="@+id/editText" />
 
     <TextView
-        android:text="Edit item Below:"
+        android:text="Specify item Below:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText"
@@ -56,6 +56,7 @@
         android:layout_marginTop="37dp"
         android:id="@+id/tvEditDate"
         android:onClick="showDatePickerDialog"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_dark" />
 
 </RelativeLayout>

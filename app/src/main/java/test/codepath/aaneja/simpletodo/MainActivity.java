@@ -3,6 +3,7 @@ package test.codepath.aaneja.simpletodo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -43,12 +44,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == EditItemActivity.EDIT_REQUEST_CODE) {
             ToDoItem todoUpdatedValue = data.getParcelableExtra(EditItemActivity.ToDoItem);
-            int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
+            boolean AddItemRequest = data.getBooleanExtra(EditItemActivity.AddItemRequest,false);
 
-            items.set(pos,todoUpdatedValue);
+            if(AddItemRequest)  {
+                items.add(todoUpdatedValue);
+            }
+            else {
+                int pos = data.getExtras().getInt(EditItemActivity.Position, 0);
+                items.set(pos,todoUpdatedValue);
+            }
+            
             itemsAdapter.notifyDataSetChanged();
-            WriteItems();
+            //WriteItems();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
     private void SetupListViewListener() {
@@ -66,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
                 Intent callEdit = new Intent(MainActivity.this, EditItemActivity.class);
+                callEdit.putExtra(EditItemActivity.AddItemRequest, false);
                 callEdit.putExtra(EditItemActivity.Position,pos);
                 callEdit.putExtra(EditItemActivity.ToDoItem,items.get(pos));
 
@@ -75,14 +91,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddItem(View v)    {
-        EditText etNewText = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewText.getText().toString();
+        Intent callAdd = new Intent(MainActivity.this, EditItemActivity.class);
+        callAdd.putExtra(EditItemActivity.AddItemRequest, true);
+        startActivityForResult(callAdd,EditItemActivity.EDIT_REQUEST_CODE);
 
-        ToDoItem item = new ToDoItem(itemText,Calendar.getInstance().getTime());
-
-        itemsAdapter.add(item);
-        etNewText.setText("");
-        WriteItems();
+        //WriteItems();
     }
 
     private void ReadItems()    {

@@ -22,10 +22,15 @@ public class EditItemActivity extends AppCompatActivity  implements DatePickerDi
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final int EDIT_REQUEST_CODE = 449;
+
+    //TODO: Need to figure out if request codes can be used to signal intent
+    public static final String AddItemRequest = "AddItemRequest";
+
     public static final String Position = "position";
     public static final String ToDoItem = "todoValue";
 
     private int position;
+    private boolean addItemRequest = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,16 @@ public class EditItemActivity extends AppCompatActivity  implements DatePickerDi
         setContentView(R.layout.activity_edit_item);
 
         Intent inbound = getIntent();
+
+        addItemRequest = inbound.getBooleanExtra(AddItemRequest, false);
+
+        if (addItemRequest)
+        {
+            TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+            tvEditDate.setText(dateFormat.format(Calendar.getInstance().getTime()));
+            return;
+        }
+
         position = inbound.getIntExtra(Position,0);
 
         ToDoItem itemToAddEdit = inbound.getParcelableExtra(ToDoItem);
@@ -49,12 +64,17 @@ public class EditItemActivity extends AppCompatActivity  implements DatePickerDi
     public void onSave(View v) throws ParseException {
         EditText etUpdatedText = (EditText) findViewById(R.id.editText);
         TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
-
+        ToDoItem updatedToDoItem = new ToDoItem(etUpdatedText.getText().toString(),dateFormat.parse(tvEditDate.getText().toString()));
 
         Intent data = new Intent();
-        ToDoItem updatedToDoItem = new ToDoItem(etUpdatedText.getText().toString(),dateFormat.parse(tvEditDate.getText().toString()));
         data.putExtra(ToDoItem, updatedToDoItem);
-        data.putExtra(Position, position);
+
+        if(addItemRequest) {
+            data.putExtra(AddItemRequest,true);
+        }
+        else  {
+            data.putExtra(Position, position);
+        }
 
         setResult(RESULT_OK, data);
         finish();
