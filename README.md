@@ -20,10 +20,10 @@ The following **optional** features are implemented:
 * [x] Add support for completion due dates for todo items (and display within listview item)
 * [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) for setting/editng a due date using a custom `DatePickerFragment`
 * [x] Use gson to persist complex types
+* [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 * [ ] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [ ] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [ ] Add support for selecting the priority of each todo item (and display in listview item)
-* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
@@ -33,7 +33,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/zTatrFf.gif' title='Video Walkthrough on a real device' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/3dj5HCj.gif' title='Video Walkthrough on a real device' width='' alt='Video Walkthrough' />
 
 GIF created with [FFmpeg](https://ffmpeg.zeranoe.com/builds/).
 
