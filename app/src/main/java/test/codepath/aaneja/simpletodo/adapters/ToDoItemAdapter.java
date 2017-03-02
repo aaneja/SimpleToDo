@@ -22,6 +22,12 @@ import test.codepath.aaneja.simpletodo.models.ToDoItem;
 
 public class ToDoItemAdapter extends ArrayAdapter<ToDoItem>{
 
+    // View lookup cache
+    private static class ViewHolder {
+        TextView name;
+        TextView dueDate;
+    }
+
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     public ToDoItemAdapter(Context context, int resource, ArrayList<ToDoItem> objects) {
@@ -36,13 +42,25 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem>{
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.todoitem, parent, false);
+
+            // Lookup view for data population
+            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+            TextView tvDueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
+            // Populate the data into the template view using the data object
+            tvName.setText(user.Name);
+            tvDueDate.setText(df.format(user.DueDate));
+
+            ViewHolder toCache = new ViewHolder();
+            toCache.name = tvName;
+            toCache.dueDate = tvDueDate;
+            convertView.setTag(toCache);
         }
-        // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        TextView tvDueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
-        // Populate the data into the template view using the data object
-        tvName.setText(user.Name);
-        tvDueDate.setText(df.format(user.DueDate));
+        else {
+            ViewHolder cached = (ViewHolder) convertView.getTag();
+            cached.name.setText(user.Name);
+            cached.dueDate.setText(df.format(user.DueDate));
+        }
+
         // Return the completed view to render on screen
         return convertView;
 
